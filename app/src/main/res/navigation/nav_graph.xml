@@ -45,7 +45,15 @@
 
     <fragment android:id="@+id/confirmationFragment"
               android:name="com.egorshustov.navigationcomponenttest.ConfirmationFragment"
-              android:label="fragment_confirmation" tools:layout="@layout/fragment_confirmation"/>
+              android:label="fragment_confirmation" tools:layout="@layout/fragment_confirmation">
+
+        <argument android:name="recipient"
+                  android:defaultValue="None"/>
+
+        <argument android:name="money"
+                  app:argType="com.egorshustov.navigationcomponenttest.Money"/>
+
+    </fragment>
 
     <fragment android:id="@+id/specifyAmountFragment"
               android:name="com.egorshustov.navigationcomponenttest.SpecifyAmountFragment"
@@ -57,6 +65,9 @@
                 app:exitAnim="@anim/slide_out_left"
                 app:popEnterAnim="@anim/slide_in_left"
                 app:popExitAnim="@anim/slide_out_right"/>
+
+        <argument android:name="recipient"
+                  android:defaultValue="None"/>
 
     </fragment>
 

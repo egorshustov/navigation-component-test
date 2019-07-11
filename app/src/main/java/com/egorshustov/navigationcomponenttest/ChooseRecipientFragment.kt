@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -32,7 +34,13 @@ class ChooseRecipientFragment : Fragment(), View.OnClickListener {
         v ?: return
         when (v.id) {
             R.id.button_next -> {
-                navController.navigate(R.id.action_chooseRecipientFragment_to_specifyAmountFragment)
+                val inputRecipientText = input_recipient.text?.toString()
+                if (!inputRecipientText.isNullOrBlank()) {
+                    val bundle = bundleOf("recipient" to inputRecipientText)
+                    navController.navigate(R.id.action_chooseRecipientFragment_to_specifyAmountFragment, bundle)
+                } else {
+                    Toast.makeText(activity, "Enter a recipient", Toast.LENGTH_SHORT).show()
+                }
             }
             R.id.button_cancel -> {
                 activity?.onBackPressed()
