@@ -6,18 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.fragment_confirmation.*
 
 
 class ConfirmationFragment : Fragment() {
-    private var recipient: String? = null
-    private var money: Money? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        recipient = arguments?.getString("recipient")
-        money = arguments?.getParcelable("money")
-    }
+    private val args: ConfirmationFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,7 +22,7 @@ class ConfirmationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val confirmationMessageText = "$${money?.amount} was sent to $recipient"
+        val confirmationMessageText = "$${args.money.amount} was sent to ${args.recipient}"
         text_confirmation_message.text = confirmationMessageText
     }
 }

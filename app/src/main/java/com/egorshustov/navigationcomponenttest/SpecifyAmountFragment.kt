@@ -6,22 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.fragment_specify_amount.*
 import java.math.BigDecimal
 
 
 class SpecifyAmountFragment : Fragment(), View.OnClickListener {
-    private lateinit var navController: NavController
-    private var recipient: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        recipient = arguments?.getString("recipient")
-    }
+    private val args: SpecifyAmountFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,10 +25,9 @@ class SpecifyAmountFragment : Fragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        navController = findNavController()
         button_send.setOnClickListener(this)
         button_cancel.setOnClickListener(this)
-        val message = "Sending money to $recipient"
+        val message = "Sending money to ${args.recipient}"
         text_recipient.text = message
     }
 
@@ -46,8 +38,13 @@ class SpecifyAmountFragment : Fragment(), View.OnClickListener {
                 val inputAmountText = input_amount.text?.toString()
                 if (!inputAmountText.isNullOrBlank()) {
                     val money = Money(BigDecimal(inputAmountText))
-                    val bundle = bundleOf("recipient" to recipient, "money" to money)
-                    navController.navigate(R.id.action_specifyAmountFragment_to_confirmationFragment, bundle)
+                    // In general, we should strongly prefer passing only the minimal amount of data between destinations.
+                    // In this case passing Money Parcelable object is just for demo example.
+                    val direction = SpecifyAmountFragmentDirections.actionSpecifyAmountFragmentToConfirmationFragment(
+                        args.recipient,
+                        money
+                    )
+                    findNavController().navigate(direction)
                 } else {
                     Toast.makeText(activity, "Enter an amount", Toast.LENGTH_SHORT).show()
                 }

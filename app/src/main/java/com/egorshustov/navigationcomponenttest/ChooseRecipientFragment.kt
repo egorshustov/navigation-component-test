@@ -6,15 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import kotlinx.android.synthetic.main.fragment_choose_recipient.*
 
 
 class ChooseRecipientFragment : Fragment(), View.OnClickListener {
-    private lateinit var navController: NavController
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,7 +22,6 @@ class ChooseRecipientFragment : Fragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        navController = findNavController()
         button_next.setOnClickListener(this)
         button_cancel.setOnClickListener(this)
     }
@@ -36,8 +32,11 @@ class ChooseRecipientFragment : Fragment(), View.OnClickListener {
             R.id.button_next -> {
                 val inputRecipientText = input_recipient.text?.toString()
                 if (!inputRecipientText.isNullOrBlank()) {
-                    val bundle = bundleOf("recipient" to inputRecipientText)
-                    navController.navigate(R.id.action_chooseRecipientFragment_to_specifyAmountFragment, bundle)
+                    val direction =
+                        ChooseRecipientFragmentDirections.actionChooseRecipientFragmentToSpecifyAmountFragment(
+                            inputRecipientText
+                        )
+                    findNavController().navigate(direction)
                 } else {
                     Toast.makeText(activity, "Enter a recipient", Toast.LENGTH_SHORT).show()
                 }
